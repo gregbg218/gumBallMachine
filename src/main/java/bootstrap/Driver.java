@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 
 public class Driver{
-     static Logger logger= LoggerFactory.getLogger(Driver.class);
+    public static Logger logger= LoggerFactory.getLogger(Driver.class);
 
     public static void main(String args[])
     {
@@ -23,9 +23,13 @@ public class Driver{
         logger.info("Starting GumBall Machine");
 
         int choice;
-        String serializedFileName="gumbal.dat";
+
+        String serializedFileName="gumball.dat";
+
         LinkedHashMap<String,Integer> input=new LinkedHashMap<String,Integer>();
+
         Scanner sc= new Scanner(System.in);
+
         Inventory gumballMachine=new Inventory();
 
         try
@@ -35,7 +39,7 @@ public class Driver{
         catch (Exception e)
         {
             System.out.println("There was an error "+e);
-            logger.error("There was an error ",e.toString());
+            logger.error("There was an error the previous instance of the machine could not be found",e.toString());
         }
 
 
@@ -76,7 +80,7 @@ public class Driver{
                     if(gumballMachine==null)
                     {
                         gumballMachine=new Inventory(name,quantity,input);
-                        //System.out.println("null so using parameter const");
+
                     }
 
                     else
@@ -84,7 +88,7 @@ public class Driver{
                         gumballMachine.setName(name);
                         gumballMachine.setQuantity(quantity);
                         gumballMachine.setInput(input);
-                        //System.out.println("setting old ");
+
                     }
                     gumballMachine.transact();
 
@@ -94,10 +98,7 @@ public class Driver{
                         System.out.println(gumballMachine);
                         break;
                     case 3:
-                        //fileContent=fileContent+transaction.getFileContent();
-                        //backup=transaction;
                         gumballMachine.refill();
-                        //fileContent=fileContent+"\nMachine has been restocked";
                         break;
                     case 4:
                         System.out.println("Shutting down machine");
@@ -112,15 +113,11 @@ public class Driver{
                         }
                         break;
 
-//                default:
-//                    System.out.println("Invalid option choose again");
+                    default:
+                        System.out.println("Invalid option choose again");
             }
 
         }while(choice!=4);
-//        fileContent=" \nStarting Gumball Machine"+fileContent+transaction.getFileContent()+"\n Machine has been shutdown";
-//        FileOutputStream outputStream = new FileOutputStream("log.txt", true);
-//        byte[] strToBytes = fileContent.getBytes();
-//        outputStream.write(strToBytes);
     }
 
     public static String configureLogging(String logFile, String logLevel) {
@@ -159,28 +156,24 @@ public class Driver{
         {
             ObjectInputStream in= new ObjectInputStream(new FileInputStream(serializedFileName));
             Inventory gumballMachine=(Inventory)in.readObject();
-            //System.out.println("Inside try of serial");
             return gumballMachine;
         }
         catch (ClassNotFoundException c)
         {
             System.out.println(("There was an error "+c));
             logger.error("There was an error ",c.toString());
-            //System.out.println("Inside catch of serial");
             return new Inventory() ;
         }
         catch (FileNotFoundException f)
         {
             System.out.println(("There was an error "+f));
             logger.error("There was an error ",f.toString());
-            //System.out.println("Inside catch of serial");
             return new Inventory() ;
         }
         catch (IOException io)
         {
             System.out.println(("There was an error "+io));
             logger.error("There was an error ",io.toString());
-            //System.out.println("Inside catch of serial");
             return new Inventory() ;
         }
 

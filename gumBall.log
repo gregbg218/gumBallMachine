@@ -1,3 +1,5 @@
-2021-09-16 12:54:06,530 [main] INFO  bootstrap.Driver - Starting GumBall Machine
-2021-09-16 13:00:18,314 [main] INFO  bootstrap.Driver - Starting GumBall Machine
-2021-09-16 13:00:18,430 [main] ERROR bootstrap.Driver - There was an error 
+2021-09-16 18:31:39,880 [main] INFO  bootstrap.Driver - Starting GumBall Machine
+2021-09-16 18:31:40,007 [main] ERROR bootstrap.Driver - There was an error 
+2021-09-16 18:33:43,308 [main] INFO  bootstrap.Driver - Starting GumBall Machine
+2021-09-16 18:33:43,432 [main] ERROR bootstrap.Driver - There was an error 
+2021-09-16 18:33:59,942 [main] INFO  bootstrap.Driver - Transaction successful here is your 1 Chocolate Frog

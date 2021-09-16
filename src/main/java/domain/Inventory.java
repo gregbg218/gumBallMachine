@@ -1,22 +1,21 @@
 package domain;
-import org.apache.log4j.DailyRollingFileAppender;
-import org.apache.log4j.EnhancedPatternLayout;
-import org.apache.log4j.Level;
-import org.apache.log4j.Priority;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.io.Serializable;
 import java.util.*;
 
-//import bootstrap.Driver;
+import static bootstrap.Driver.logger;
 
 
 public class Inventory implements Serializable
 {
-    private Double amount;
+
+
     private int noteCount;
     private int quantity;
+
+    private Double amount;
+
     private String name;
 
     private HashMap<String,Sweets> sweetStock;
@@ -61,34 +60,6 @@ public class Inventory implements Serializable
         coinStock.put(0.25,twentyfivepaise);
     }
 
-    public static String configureLogging(String logFile, String logLevel) {
-        DailyRollingFileAppender dailyRollingFileAppender = new DailyRollingFileAppender();
-
-        String logFilename = "";
-        switch (logLevel) {
-            case "DEBUG": {
-                dailyRollingFileAppender.setThreshold(Level.toLevel(Priority.DEBUG_INT));
-            }
-            case "WARN": {
-                dailyRollingFileAppender.setThreshold(Level.toLevel(Priority.WARN_INT));
-            }
-            case "ERROR": {
-                dailyRollingFileAppender.setThreshold(Level.toLevel(Priority.ERROR_INT));
-            }
-            default: {
-                dailyRollingFileAppender.setThreshold(Level.toLevel(Priority.INFO_INT));
-            }
-            break;
-        }
-
-        System.out.println("Log files written out at " + logFile);
-        dailyRollingFileAppender.setFile(logFile);
-        dailyRollingFileAppender.setLayout(new EnhancedPatternLayout("%d [%t] %-5p %c - %m%n"));
-
-        dailyRollingFileAppender.activateOptions();
-        org.apache.log4j.Logger.getRootLogger().addAppender(dailyRollingFileAppender);
-        return dailyRollingFileAppender.getFile();
-    }
 
     public void transact()
     {
@@ -97,7 +68,7 @@ public class Inventory implements Serializable
         if(checkSweetStock(name))
         {
             System.out.println("Required quantity of "+name+" is out of stock");
-//            Driver.logger.info("");
+            logger.info("Required quantity of "+name+" is out of stock");
             cancelAndRefund();
         }
         else
@@ -106,6 +77,7 @@ public class Inventory implements Serializable
             if(change==0.0)
             {
                 System.out.println("Transaction successful here is your "+quantity+" "+name);
+                logger.info("Transaction successful here is your "+quantity+" "+name);
                 changeSweetStock();
                 changeMoneyStock();
             }
@@ -114,6 +86,7 @@ public class Inventory implements Serializable
                 if(checkChangeStock(change))
                 {
                     System.out.println("Transaction successful here is your "+quantity+" "+name);
+                    logger.info("Transaction successful here is your "+quantity+" "+name);
                     System.out.println("Here is your change");
                     changeMoneyStock();
                     change=calculateChange(change,5.0);
@@ -125,12 +98,14 @@ public class Inventory implements Serializable
                 else
                 {
                     System.out.println("Sorry we are out of change");
+                    logger.info("Sorry we are out of change");
                     cancelAndRefund();
                 }
             }
             else
             {
                 System.out.println("Insufficient amount paid");
+                logger.info("Insufficient amount paid");
                 cancelAndRefund();
             }
         }
@@ -149,7 +124,9 @@ public class Inventory implements Serializable
     public void cancelAndRefund()
     {
         System.out.println("Transaction cancelled");
+        logger.info("Transaction cancelled");
         System.out.println("Here is your refund");
+
         for(String denomination: input.keySet())
         {
             System.out.println(input.get(denomination)+" "+denomination);
@@ -165,7 +142,6 @@ public class Inventory implements Serializable
     public Boolean checkChangeStock(Double change)
     {
         Double sum=0.25*(coinStock.get(0.25).getQuantity())+0.50*(coinStock.get(0.50).getQuantity())+1.0*(coinStock.get(1.0).getQuantity())+5.0*(coinStock.get(5.0).getQuantity());
-        //System.out.println("We have coins sum "+sum);
         if(change>sum)
             return false;
         if(change%0.5==0.0 ||change%0.25==0.0 ||change%5.0==0.0 ||change%1.0==0.0 )
@@ -197,12 +173,10 @@ public class Inventory implements Serializable
         int i = (int) (change / denomination);
         int count = coinStock.get(denomination).getQuantity();
         if (i <= count) {
-            // System.out.println("entering if 5 " + change + " " + i);
             change = change - denomination * i;
             coinStock.get(denomination).setQuantity(count - i);
             System.out.println(i+" coins of Rs "+denomination );
         } else {
-            //System.out.println("entering else 5 " + change);
             change = change - denomination * count;
             coinStock.get(denomination).setQuantity(0);
             System.out.println(0.0+" coins of Rs "+denomination );
@@ -221,6 +195,8 @@ public class Inventory implements Serializable
             coinStock.get(coin).setQuantity(50);
         }
         System.out.println("Gumball machines has been restocked");
+        logger.info("Gumball machines has been restocked");
+
     }
 
     @Override
